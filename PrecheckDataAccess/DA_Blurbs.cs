@@ -17,7 +17,7 @@ namespace PrecheckDataAccess
         #region blurbs
         public void addBlurb(BM_Blurb blurb)
         {
-            string query = "INSERT INTO hectorhaas.precheckBlurbs (blurbText, categoryID) VALUES ('"+blurb.blurbText+"', "+blurb.categoryID+")";
+            string query = "INSERT INTO hectorhaas.precheckBlurbs (blurbText, categoryID) VALUES ('"+cleanText(blurb.blurbText)+"', "+blurb.categoryID+")";
             DataAccess.justExecuteQuery(query);
         }
         public BM_Blurb getBlurbWithID(string blurbID)
@@ -66,7 +66,7 @@ namespace PrecheckDataAccess
         #region categories
         public void addBlurbCategory(BM_BlurbCategory category)
         {
-            string query = "INSERT INTO hectorhaas.precheckBlurbCategories (categoryName, categoryDescription) VALUES ('"+category.categoryName+"', '"+category.categoryDescription+"')";
+            string query = "INSERT INTO hectorhaas.precheckBlurbCategories (categoryName, categoryDescription) VALUES ('"+ cleanText(category.categoryName)+"', '"+ cleanText(category.categoryDescription)+"')";
             DataAccess.justExecuteQuery(query);
         }
         public BM_BlurbCategory getBlurbCategoryWithID(string ID)
@@ -96,5 +96,10 @@ namespace PrecheckDataAccess
         }
 
         #endregion
+        private string cleanText(string text)
+        {
+            text = text.Trim().Replace("'", "''");
+            return text;
+        }
     }
 }

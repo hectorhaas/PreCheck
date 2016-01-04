@@ -14,6 +14,7 @@ namespace PrecheckDataAccess
         {
 
         }
+        #region blurbs
         public void addBlurb(BM_Blurb blurb)
         {
             string query = "INSERT INTO hectorhaas.precheckBlurbs (blurbText, categoryID) VALUES ('"+blurb.blurbText+"', "+blurb.categoryID+")";
@@ -61,5 +62,39 @@ namespace PrecheckDataAccess
             }
             return blurbList;
         }
+        #endregion
+        #region categories
+        public void addBlurbCategory(BM_BlurbCategory category)
+        {
+            string query = "INSERT INTO hectorhaas.precheckBlurbCategories (categoryName, categoryDescription) VALUES ('"+category.categoryName+"', '"+category.categoryDescription+"')";
+            DataAccess.justExecuteQuery(query);
+        }
+        public BM_BlurbCategory getBlurbCategoryWithID(string ID)
+        {
+            BM_BlurbCategory blurbCat = new BM_BlurbCategory();
+            string query = "SELECT id, categoryName, categoryDescription FROM hectorhaas.precheckBlurbCategories WHERE id = " + ID;
+            DataTable dt = DataAccess.getAnyDataTable(query);
+            blurbCat.id = ID;
+            blurbCat.categoryName = dt.Rows[0]["categoryName"].ToString();
+            blurbCat.categoryDescription = dt.Rows[0]["categoryDescription"].ToString();
+            return blurbCat;
+        }
+        public List<BM_BlurbCategory> getAllBlurbCategories()
+        {
+            List<BM_BlurbCategory> catList = new List<BM_BlurbCategory>();
+            string query = "SELECT id, categoryName, categoryDescription FROM hectorhaas.precheckBlurbCategories ORDER BY categoryName ASC";
+            DataTable dt = DataAccess.getAnyDataTable(query);
+            for (int i = 0;i<dt.Rows.Count;i++)
+            {
+                BM_BlurbCategory blurbCat = new BM_BlurbCategory();
+                blurbCat.id = dt.Rows[i]["id"].ToString();
+                blurbCat.categoryName = dt.Rows[i]["categoryName"].ToString();
+                blurbCat.categoryDescription = dt.Rows[i]["categoryDescription"].ToString();
+                catList.Add(blurbCat);
+            }
+            return catList;
+        }
+
+        #endregion
     }
 }
